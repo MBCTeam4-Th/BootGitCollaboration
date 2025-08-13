@@ -27,9 +27,8 @@ public class CartServiceImpl {
     @Autowired
     private StudentRepository studentRepository;
 
-    // 학생별 장바구니 조회(없으면 새로 생성)
+    // 학생별 장바구니 조회(없으면 새로 생성) // 깃테스트
     public Cart getOrCreateCart(Student student) {
-
         return cartRepository.findByStudent(student)
                 .orElseGet(() -> {
                     Cart cart = new Cart();

@@ -34,5 +34,5 @@ public class CoursePageController {
 
         return "course/detail";
     }
-
+//주석
 }

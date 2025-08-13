@@ -28,5 +28,5 @@ public class EnrollmentDetail {
 
     @Column(name = "course_fee")
     private Integer courseFee;
-//git test
+
 }

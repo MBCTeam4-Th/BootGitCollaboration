@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${course.courseName} + ' | 온라인 강의실'">강의 상세 | 온라인 강의실</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<div class="navbar">
+    <a href="/">온라인 강의실</a>
+    <a href="/courses">강의목록</a>
+    <a href="/student/signup">회원가입</a>
+</div>
+<div class="detail-container">
+    <img class="course-image"
+         th:src="${#lists.isEmpty(images) ? '/images/default-course.jpg' : images[0].imgUrl}"
+         th:alt="${course.courseName}"/>
+    <div class="course-main">
+        <div class="course-title" th:text="${course.courseName}"></div>
+        <div class="course-meta">
+            <span>가격: <b th:text="${course.courseFee}"></b>원</span>
+            <span>정원: <b th:text="${course.maxEnrollment}"></b>명</span>
+            <span th:if="${course.intemSellStatus == 'sold_out'}" style="color:#d32f2f;font-weight:bold;">마감</span>
+            <span th:if="${course.intemSellStatus == 'sell'}" style="color:#39b54a;font-weight:bold;">신청가능</span>
+        </div>
+        <div class="course-desc" th:text="${course.courseDescription}"></div>
+        <div class="enroll-box">
+            <form th:action="@{/enrollment/enroll/{id}(id=${course.courseId})}" method="post">
+                <button type="submit" class="enroll-btn"
+                        th:disabled="${course.intemSellStatus == 'sold_out'}">수강신청</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>강의 목록 | 온라인 강의실</title>
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<div class="navbar">
+  <a href="/">온라인 강의실</a>
+  <a href="/courses">강의목록</a>
+  <a href="/student/signup">회원가입</a>
+</div>
+<div class="container">
+  <h1>강의 목록</h1>
+  <div class="course-list">
+    <div class="course-card" th:each="course : ${courses}">
+      <img class="course-thumb"
+           th:src="${#lists.isEmpty(course.images) ? '/images/default-course.jpg' : course.images[0].imgUrl}"
+           th:alt="${course.courseName}" />
+      <div class="course-content">
+        <div class="course-name" th:text="${course.courseName}"></div>
+        <div class="course-fee">₩<span th:text="${course.courseFee}"></span></div>
+        <div class="course-desc" th:text="${course.courseDescription}"></div>
+        <a class="btn" th:href="@{|/courses/${course.courseId}|}">자세히 보기</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

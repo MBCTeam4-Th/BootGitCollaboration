@@ -1,0 +1,54 @@
+body { font-family:'Noto Sans KR',sans-serif; margin:0; background:#f7f8fa; }
+a { color:#1976d2; text-decoration:none; }
+.navbar { background:#222; color:#fff; padding:18px 36px; }
+.navbar a { color:#fff; text-decoration:none; margin-right:24px; font-weight:600;}
+.container { max-width:1100px; margin:36px auto 0 auto; }
+.btn, button[type="submit"] { background:#1976d2; color:#fff; border:none; padding:10px 22px; border-radius:5px; font-size:1em; font-weight:500; cursor:pointer;}
+.btn:hover, button[type="submit"]:hover { background:#1456b5; }
+h1 { margin-top:0; }
+
+/* index.html */
+.main-container { max-width:670px; margin:90px auto 0 auto; background:#fff; box-shadow:0 5px 24px #2222; border-radius:14px; text-align:center; padding:60px 0;}
+.main-container h1 { font-size:2.5em; margin-bottom:1em; }
+.main-container .btn { margin:0 18px; }
+
+/* signup.html */
+.signup-wrapper { max-width:430px; margin:60px auto; padding:40px; background:#fff; border-radius:10px; box-shadow:0 3px 18px #2221;}
+.signup-wrapper h1 { text-align:center; font-size:2em; margin-bottom:33px;}
+.form-row { margin-bottom:20px;}
+label { display:block; font-weight:700; color:#222; margin-bottom:9px;}
+input[type=text], input[type=password] { width:100%; box-sizing:border-box; padding:10px; border-radius:6px; border:1px solid #ccced8; font-size:1em; }
+.signup-wrapper .btn { width:100%; margin-top:24px; }
+
+/* list.html */
+.course-list { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+.course-card { background:#fff; border-radius:8px; box-shadow:0 2px 8px #0001; overflow:hidden; transition: box-shadow .2s; }
+.course-card:hover { box-shadow:0 6px 24px #0003; }
+.course-thumb { width:100%; height:160px; object-fit:cover; background:#eee; }
+.course-content { padding:18px; }
+.course-name { font-size:1.1em; font-weight:700; color:#232323; }
+.course-fee { font-size:0.97em; color:#1976d2; margin:6px 0 12px 0; }
+.course-desc { color:#666; font-size:0.97em; min-height:40px; }
+
+/* detail.html */
+.detail-container { max-width:800px; margin:32px auto; display:flex; gap:28px; background:#fff; border-radius:12px; box-shadow:0 3px 14px #0001;}
+.course-image { width:340px; height:220px; object-fit:cover; border-radius:12px 0 0 12px; background:#eee; margin-left:-36px;}
+.course-main { flex:1; padding:28px 0 28px 36px;}
+.course-title { font-size:2em;}
+.course-meta span { display:inline-block; margin-right:30px; color:#888;}
+.course-desc { margin:16px 0; color:#444; }
+.enroll-box { margin-top:32px; }
+.enroll-btn { background:#39b54a; color:#fff; border:none; padding:14px 34px; font-size:1.12em; border-radius:6px; cursor:pointer;}
+.enroll-btn:hover { background:#268437;}
+.enroll-btn[disabled] { background:#ccc; color:#666; cursor:not-allowed; }
+
+/* myEnrollments.html */
+.my-container { max-width:800px; margin:44px auto; background:#fff; border-radius:8px; box-shadow:0 3px 14px #1131;}
+.enroll-list { margin:26px 32px 44px 32px;}
+.enroll-item { border-bottom:1px solid #e0e0e0; padding:21px 0;}
+.enroll-item:last-child { border-bottom:none;}
+.course-title { font-size:1.16em; font-weight:bold; color:#222;}
+.status { float:right; font-weight:bold;}
+.status.order { color:#39b54a;}
+.status.cancel { color:#d32f2f; }
+.clear { clear:both;}

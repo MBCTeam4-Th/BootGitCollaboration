@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>내 강의실 | 온라인 강의실</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+<body>
+<div class="navbar">
+    <a href="/">온라인 강의실</a>
+    <a href="/courses">강의목록</a>
+    <a href="/student/signup">회원가입</a>
+</div>
+<div class="my-container">
+    <h1>내 강의실</h1>
+    <div class="enroll-list">
+        <div class="enroll-item" th:each="enrollment : ${enrollments}">
+            <span class="course-title"
+                  th:text="${enrollment.course.courseName}">강의명</span>
+            <span class="status"
+                  th:classappend="${enrollment.enrollmentStatus}"
+                  th:text="${enrollment.enrollmentStatus}">상태</span>
+            <div class="clear"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

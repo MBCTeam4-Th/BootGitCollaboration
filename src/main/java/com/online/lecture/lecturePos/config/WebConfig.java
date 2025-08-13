@@ -7,7 +7,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
+//사용자가 images/course/abcd.jpg 요청하면 서버가 c:/lecture/class/abcd/jpg 를 찾아서 반환해주는 다리역할
+    // addResourceHanlers()에서 이매핑을 설정함
     @Value("${file.upload-dir}")
     private String uploadDir;
 

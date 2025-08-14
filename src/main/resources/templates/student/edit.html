@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>학생 수정</title></head>
+<body>
+<h1>학생 수정</h1>
+<form th:action="@{/student/edit}" th:object="${student}" method="post">
+    <input type="hidden" th:field="*{studentId}" />
+    이메일: <input type="text" th:field="*{email}" /><br/>
+    비밀번호: <input type="password" th:field="*{password}" /><br/>
+    이름: <input type="text" th:field="*{studentName}" /><br/>
+    역할:
+    <select th:field="*{role}">
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+    </select><br/>
+    <button type="submit">저장</button>
+</form>
+</body>
+</html>

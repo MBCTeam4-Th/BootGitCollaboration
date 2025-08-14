@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>학생 목록</title></head>
+<body>
+<h1>학생 목록</h1>
+<a th:href="@{/student/signup}">학생 추가</a>
+<table border="1">
+    <tr>
+        <th>ID</th><th>이메일</th><th>이름</th><th>역할</th><th>액션</th>
+    </tr>
+    <tr th:each="s : ${students}">
+        <td th:text="${s.studentId}"></td>
+        <td th:text="${s.email}"></td>
+        <td th:text="${s.studentName}"></td>
+        <td th:text="${s.role}"></td>
+        <td>
+            <a th:href="@{/student/edit/{id}(id=${s.studentId})}">수정</a>
+            <a th:href="@{/student/delete/{id}(id=${s.studentId})}">삭제</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

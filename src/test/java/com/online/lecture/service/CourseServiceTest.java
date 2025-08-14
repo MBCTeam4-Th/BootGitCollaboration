@@ -1,85 +1,53 @@
 package com.online.lecture.service;
 
-
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import com.online.lecture.lecturePos.core.SellStatus;
-import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseReq;
-import com.online.lecture.lecturePos.models.course.repository.CourseImgRepository;
 import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
-import com.online.lecture.lecturePos.models.course.service.CourseService;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+@WithMockUser(username = "admin", roles = {"ADMIN"})
 @SpringBootTest
-@Transactional
+@AutoConfigureMockMvc
+@ActiveProfiles("test")
 public class CourseServiceTest {
 
-    //@Autowired
-    @InjectMocks
-    private CourseService courseService;
+    @Autowired
+    private MockMvc mockMvc;
 
-    //@Autowired
-    //@MockBean
-    @Mock
+    @Autowired
     private CourseRepository courseRepository;
 
-    //@Autowired
-    @Mock
-    private CourseImgRepository courseImgRepository;
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
-    public void testSaveCourse() {
-        // 여기에 테스트 로직 작성
-        // 1. PostCourseReq 객체 생성
-        PostCourseReq req = new PostCourseReq();
-        req.setCourseName("테스트 강좌");
-        req.setCourseDescription("설명");
-        req.setCourseFee(10000);
-        req.setIntemSellStatus(SellStatus.order);
-        req.setMaxEnrollment(20);
-
-        // 2. 이미지 파일 리스트 (테스트용 빈 MultipartFile)
-       // List<MultipartFile> imgFiles = new ArrayList<>();
-        // 필요시 MockMultipartFile 사용 가능
-        // imgFiles.add(new MockMultipartFile("file", "test.jpg", "image/jpeg", "dummy content".getBytes()));
-/*
-        MockMultipartFile mockFile = new MockMultipartFile(
-                "file",
-                "test.jpg",
+    void testCourseCreateIntegration() throws Exception {
+        // 테스트 메서드 내에서
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "courseImgFile",              // 컨트롤러 파라미터명과 동일해야 함
+                "test-image.jpg",
                 "image/jpeg",
-                "dummy content".getBytes()
+                "dummy image content".getBytes()
         );
-        imgFiles.add(mockFile);*/
-        List<MultipartFile> imgFiles = new ArrayList<>();
 
-
-        // 3. 서비스 호출
-        courseService.saveCourse(req, imgFiles);
-
-        // 4. DB 확인 (assert, System.out.println 등)
-       /* assertEquals(1, courseRepository.count());
-        assertEquals(1, courseImgRepository.count());
-        assertEquals("테스트 강좌", courseRepository.findAll().get(0).getCourseName());
-        System.out.println("저장 완료");*/
-        // Repository 메서드 호출 여부 확인
-        verify(courseRepository, times(1)).save(any());
-        System.out.println("CourseService 단위 테스트 완료");
+        mockMvc.perform(multipart("/admin/course/new")
+                        .file(imageFile)  // 이미지 파일 포함
+                        .param("courseName", "MySQL 통합 테스트")
+                        .param("courseDescription", "실제 DB 연동")
+                        .param("courseFee", "15000")
+                        .param("intemSellStatus", "order")
+                        .param("maxEnrollment", "20")
+                        .with(csrf()))
+                .andExpect(status().is3xxRedirection());
     }
 }

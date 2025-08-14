@@ -23,8 +23,7 @@ public class CourseImgServiceImpl implements CourseImgService {
     private final CourseImgRepository courseImgRepository;
     private final FileService fileService;
 
-    @Value("C:/lecture/class") // @Value("${courseImgLocation}") // application.properties에서 설정 courseImgLocation=C:/lecture/class
-
+    @Value("${file.upload-dir}") // @Value("${courseImgLocation}") // application.properties에서 설정 courseImgLocation=C:/lecture/class/courses
     private String uploadPath;
 
     @Override

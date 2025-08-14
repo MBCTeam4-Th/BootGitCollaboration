@@ -1,46 +1,26 @@
 package com.online.lecture.lecturePos.models.course.service;
 
-
-import com.online.lecture.lecturePos.models.course.domain.Course;
-import com.online.lecture.lecturePos.models.course.domain.CourseImg;
-import com.online.lecture.lecturePos.models.course.repository.CourseImgRepository;
-import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.online.lecture.lecturePos.models.course.dto.getCouresDetail.GetCourseDetailReq;
+import com.online.lecture.lecturePos.models.course.dto.getCouresDetail.GetCourseDetailRes;
+import com.online.lecture.lecturePos.models.course.dto.getCourse.GetCourseListReq;
+import com.online.lecture.lecturePos.models.course.dto.getCourse.GetCourseListRes;
+import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseReq;
+import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseRes;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Optional;
 
+public interface CourseService {
+    //1 등록
+    PostCourseRes saveCourse(PostCourseReq request, List<MultipartFile> imgFiles);
 
-@Service
-public class CourseService {
-    
-        @Autowired
-        private CourseRepository courseRepository;
-        
-        @Autowired
-        private CourseImgRepository courseImgRepository;
+    //2-1. 강좌 목록조회 admin
+    GetCourseListRes getCourseList(Page<GetCourseListReq> request, Pageable pageable);
 
-        // course service 시작
-        public List<Course> listAllCourses() {
-            return courseRepository.findAll();
-        }
-
-        public Optional<Course> getCourse(Long courseId) {
-            return courseRepository.findById(courseId);
-        }
-        // course service 종료
-        
-        // course imgService (대표이미지 관련)
-        public List<CourseImg> getCourseImages(Course course) {
-            return courseImgRepository.findByCourse(course);
-        }
-        // course imgService 종료
-    
-
-
-
+    //2-2. 강좌 상세조회 admin
+    GetCourseDetailRes getCourseDetail(Long courseId);
 
 
 }

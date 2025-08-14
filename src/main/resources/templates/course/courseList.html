@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"/><title>강의 목록</title></head>
+<body>
+<h1>강의 목록</h1>
+
+<table border="1" cellspacing="0" cellpadding="6">
+    <thead>
+    <tr>
+        <th>ID</th><th>이름</th><th>수강료</th><th>상태</th><th>상세</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c : ${courses}">
+        <td th:text="${c.courseId}">1</td>
+        <td th:text="${c.courseName}">이름</td>
+        <td th:text="${c.courseFee}">10000</td>
+        <td th:text="${c.intemSellStatus}">order</td>
+        <td><a th:href="@{'/courses/' + ${c.courseId}}">보기</a></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

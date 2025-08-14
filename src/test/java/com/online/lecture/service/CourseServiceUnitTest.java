@@ -1,25 +1,36 @@
 package com.online.lecture.service;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-
+// JUnit assertions
+import com.online.lecture.lecturePos.core.SellStatus;
 import com.online.lecture.lecturePos.models.course.domain.Course;
-import com.online.lecture.lecturePos.models.course.repository.CourseImgRepository;
-import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
-import com.online.lecture.lecturePos.models.course.service.CourseService;
-
 import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseReq;
 import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseRes;
-
-import org.junit.jupiter.api.BeforeEach;
+import com.online.lecture.lecturePos.models.course.repository.CourseImgRepository;
+import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
+import com.online.lecture.lecturePos.models.course.service.CourseImgService;
+import com.online.lecture.lecturePos.models.course.service.CourseServiceImpl;
+import com.online.lecture.lecturePos.models.course.service.FileService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.web.multipart.MultipartFile;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
-import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+// Mockito stubbing & verification
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+
+@ExtendWith(MockitoExtension.class)
 class CourseServiceUnitTest {
 
     @Mock
@@ -28,51 +39,45 @@ class CourseServiceUnitTest {
     @Mock
     private CourseImgRepository courseImgRepository;
 
-    // 인터페이스를 구현한 테스트용 임시 구현체
-    private CourseService courseService;
+    @Mock
+    private FileService fileService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    @Mock
+    private CourseImgService courseImgService;
 
-        courseService = new CourseService() {
-            @Override
-            public PostCourseRes saveCourse(PostCourseReq request, List<MultipartFile> imgFiles) {
-                // Course 객체 생성 및 Repository save Mock 호출
-                com.online.lecture.lecturePos.models.course.domain.Course course = new com.online.lecture.lecturePos.models.course.domain.Course();
-                course.setCourseName(request.getCourseName());
-                course.setCourseDescription(request.getCourseDescription());
-
-                when(courseRepository.save(any(com.online.lecture.lecturePos.models.course.domain.Course.class))).thenReturn(course);
-
-                courseRepository.save(course);
-
-                // PostCourseRes 변환
-                PostCourseRes res = new PostCourseRes();
-                res.setCourseDetail(course);
-                return res;
-            }
-        };
-    }
+    @InjectMocks
+    private CourseServiceImpl courseService;  // 실제 구현체 사용
 
     @Test
     void testSaveCourse() {
-        // 준비
-        PostCourseReq req = new PostCourseReq();
-        req.setCourseName("Java Basics");
-        req.setCourseDescription("Java 기초 강좌");
+        // given
+        PostCourseReq req = PostCourseReq.builder()
+                .courseName("Java Basics")
+                .courseDescription("Java 기초 강좌")
+                .courseFee(10000)
+                .intemSellStatus(SellStatus.order)
+                .maxEnrollment(30)
+                .build();
 
-        List<MultipartFile> imgFiles = Collections.emptyList();
+        Course mockCourse = Course.builder()
+                .courseId(1L)
+                .courseName(req.getCourseName())
+                .courseDescription(req.getCourseDescription())
+                .courseFee(req.getCourseFee())
+                .intemSellStatus(req.getIntemSellStatus())
+                .maxEnrollment(req.getMaxEnrollment())
+                .build();
 
-        // 실행
-        PostCourseRes res = courseService.saveCourse(req, imgFiles);
+        when(courseRepository.save(any(Course.class))).thenReturn(mockCourse);
 
-        // 검증
+        // when
+        PostCourseRes res = courseService.saveCourse(req, Collections.emptyList());
+
+        // then
         assertNotNull(res);
         assertEquals("Java Basics", res.getCourseDetail().getCourseName());
-
-        // Repository save 호출 검증
         verify(courseRepository, times(1)).save(any(Course.class));
     }
-}
 
+
+}

@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/images/**")
                 .addResourceLocations("file:///" + uploadDir);
-        // TODO : 추후 LINUX 배포 시 /home/lecture/class로 경로 치환 필요
+        // TODO : 추후 LINUX 배포 시 /home/lecture/class로 경로 치환 필요1212
         // TODO : 그에 맞게 application.properties상의 upload-dir도 변경 필요
     }
 

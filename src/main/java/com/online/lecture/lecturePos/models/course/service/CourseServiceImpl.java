@@ -2,12 +2,18 @@ package com.online.lecture.lecturePos.models.course.service;
 
 import com.online.lecture.lecturePos.models.course.domain.Course;
 import com.online.lecture.lecturePos.models.course.domain.CourseImg;
+import com.online.lecture.lecturePos.models.course.dto.getCouresDetail.GetCourseDetailReq;
+import com.online.lecture.lecturePos.models.course.dto.getCouresDetail.GetCourseDetailRes;
+import com.online.lecture.lecturePos.models.course.dto.getCourse.GetCourseListReq;
+import com.online.lecture.lecturePos.models.course.dto.getCourse.GetCourseListRes;
 import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseReq;
 import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseRes;
 import com.online.lecture.lecturePos.models.course.repository.CourseImgRepository;
 import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -70,4 +76,50 @@ public class CourseServiceImpl implements CourseService {
                 .build();
 
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public GetCourseListRes getCourseList(Page<GetCourseListReq> request, Pageable pageable) {
+        // 목록조회
+        // JPA에서 엔티티 Page 가져와서 화면 DTO(GetCourseListReq)로 매핑
+
+        var page = courseRepository.findAll(pageable);
+
+        Page<GetCourseListReq> mapped = page.map(c -> {
+                //대표 이미지 URL 없으면 null
+            /*
+            String mainUrl = courseImgRepository.findFirstByCourseAndMainImgYn(c)
+                    .map(CourseImg::getImgUrl)
+                    .orElse(null);*/
+            String mainUrl = courseImgRepository.findByCourse(c).stream()
+                    .filter(img -> Boolean.TRUE.equals(img.getMainImgYn()))
+                    .map(CourseImg::getImgUrl)
+                    .findFirst()
+                    .orElse(null);
+
+            return new GetCourseListReq(
+                    c.getCourseId(),
+                    c.getCourseName(),
+                    c.getCourseFee(),
+                    c.getIntemSellStatus(),
+                    mainUrl
+            );
+        });
+
+        return GetCourseListRes.builder()
+                .coursePage(mapped)
+                .currentPage(pageable.getPageNumber())
+                .pageSize(pageable.getPageSize())
+                .build();
+    }
+    @Transactional(readOnly = true)
+    @Override
+    public GetCourseDetailRes getCourseDetail(Long courseId) {
+        // 상세조회
+        Course request = courseRepository
+                .findById(courseId).orElseThrow(()-> new IllegalArgumentException("존재하지 않는 강좌입니다 ID : " + courseId));
+
+        return null;
+    }
+
 } // course imgService 종료

@@ -1,0 +1,59 @@
+<!-- src/main/resources/templates/course/courseForm.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>강의 등록</title>
+</head>
+<body>
+<h1>강의 등록폼</h1>
+
+<!-- 서버에서 넣어준 에러 메시지(있을 때만) -->
+<div th:if="${errorMessage != null}" style="color:red" th:text="${errorMessage}"></div>
+
+<!-- 바인딩 편의 기능 안 씀: 일반 HTML 폼 + name 매칭으로만 처리 -->
+<form action="/admin/course/new" method="post" enctype="multipart/form-data">
+    <!-- CSRF가 켜져 있으면 자동 주입된 _csrf로 hidden 추가 (없으면 렌더 안 됨) -->
+    <div th:if="${_csrf != null}">
+    </div>        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
+
+    <div>
+        <label for="courseName">강의명 *</label>
+        <input type="text" id="courseName" name="courseName" required />
+    </div>
+
+    <div>
+        <label for="courseDescription">강의설명</label>
+        <textarea id="courseDescription" name="courseDescription"></textarea>
+    </div>
+
+    <div>
+        <label for="courseFee">수강료</label>
+        <input type="number" id="courseFee" name="courseFee" />
+    </div>
+
+    <div>
+        <label for="intemSellStatus">모집상태</label>
+        <select id="intemSellStatus" name="intemSellStatus">
+            <!-- 네 enum 값 그대로 -->
+            <option value="order">order</option>
+            <option value="cancel">cancel</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="maxEnrollment">최대 수강인원</label>
+        <input type="number" id="maxEnrollment" name="maxEnrollment" />
+    </div>
+
+    <div>
+        <label for="courseImgFile">강의 이미지(첫번째 필수)</label>
+        <input type="file" id="courseImgFile" name="courseImgFile" multiple />
+    </div>
+
+    <button type="submit">등록</button>
+    <div th:if="${param.success}" style="color: green;">등록이 완료되었습니다.</div>
+</form>
+</body>
+</html>

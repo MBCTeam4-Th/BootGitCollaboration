@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/student")
 public class StudentPageController {
-
     private final StudentService studentService;
 
     // 회원가입 폼

@@ -17,16 +17,16 @@ public class CourseImg {
     private Long courseImgId;
 
     @Column(name = "img_url")
-    private String imgUrl; //이미지조회경로
+    private String imgUrl;
 
     @Column(name = "img_name")
-    private String imgName; //이미지파일명
+    private String imgName;
 
     @Column(name = "main_img_yn")
-    private Boolean mainImgYn; //대표이미지여부
+    private Boolean mainImgYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "course_id") // Course와 다대일 단방향 관계로 매핑
+    @JoinColumn(name = "course_id")
     private Course course;
 
 }

@@ -1,7 +1,7 @@
 package com.online.lecture.lecturePos.controller.course;
 
 import com.online.lecture.lecturePos.models.course.domain.Course;
-import com.online.lecture.lecturePos.models.course.service.CourseServiceImpl;
+import com.online.lecture.lecturePos.models.course.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class CoursePageController {
 
     @Autowired
-    private CourseServiceImpl courseServiceImpl;
+    private CourseService courseService;
 
     @GetMapping
     public String listCourses(Model model) {
 
-        model.addAttribute("courses", courseServiceImpl.listAllCourses());
+        model.addAttribute("courses", courseService.listAllCourses());
 
         return "course/list";
     }
@@ -27,12 +27,12 @@ public class CoursePageController {
     @GetMapping("/courses/{courseId}")
     public String courseDetail(@PathVariable("courseId") Long courseId, Model model) {
 
-        Course course = courseServiceImpl.getCourse(courseId).orElseThrow();
+        Course course = courseService.getCourse(courseId).orElseThrow();
 
         model.addAttribute("course", course);
-        model.addAttribute("images", courseServiceImpl.getCourseImages(course));
+        model.addAttribute("images", courseService.getCourseImages(course));
 
         return "course/detail";
     }
-//주석09
+
 }

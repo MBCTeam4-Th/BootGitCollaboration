@@ -19,7 +19,7 @@ public class EnrollmentPageController {
 
     @Autowired
     private EnrollmentService enrollmentService;
-    
+
     @Autowired
     private StudentService studentService;
 
@@ -48,7 +48,7 @@ public class EnrollmentPageController {
 
         return "enrollment/myEnrollments";
     }
-    
+
 }
 
 

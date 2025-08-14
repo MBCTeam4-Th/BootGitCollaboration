@@ -10,6 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CourseImg {
+//todo: 오리지널 파일네임을 저장할 필드가 없으므로 가능하다면 추가
+    // @Column(name = "ori_img_name")
+    //private String oriImgName;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,6 +27,7 @@ public class CourseImg {
 
     @Column(name = "main_img_yn")
     private Boolean mainImgYn;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")

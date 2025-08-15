@@ -46,7 +46,7 @@ public class CourseImgServiceImpl implements CourseImgService {
             //3.접근 가능한 URL 생성
             // 저장한 상품의 이미지 불러올 경로를 설정
             // WebMvcConfig 에서 설정함 c:\shop이므로 /images/item/를 붙여줌
-            String imgUrl = "/images/courses/" + saveFileName;
+            String imgUrl = "/images/" + saveFileName;
 
             //4.CourseImg 엔티티생성
             CourseImg saveCourseImg = CourseImg.builder()

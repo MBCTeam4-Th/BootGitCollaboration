@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Service
 public class StudentService {
 
-   todo:@Autowired
+   @Autowired
     private StudentRepository studentRepository;
     private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 

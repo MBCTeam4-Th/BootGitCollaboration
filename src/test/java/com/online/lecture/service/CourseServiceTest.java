@@ -2,10 +2,14 @@ package com.online.lecture.service;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import com.online.lecture.lecturePos.core.SellStatus;
+import com.online.lecture.lecturePos.models.course.dto.getCouresDetail.GetCourseDetailReq;
+import com.online.lecture.lecturePos.models.course.dto.getCouresDetail.GetCourseDetailRes;
 import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
 
+import com.online.lecture.lecturePos.models.course.service.CourseService;
 import org.junit.jupiter.api.Test;
 
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +19,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WithMockUser(username = "admin", roles = {"ADMIN"})
 @SpringBootTest
@@ -29,6 +34,8 @@ public class CourseServiceTest {
 
     @Autowired
     private CourseRepository courseRepository;
+    @Autowired
+    private CourseService courseService;
 
     @Test
     void testCourseCreateIntegration() throws Exception {
@@ -50,4 +57,5 @@ public class CourseServiceTest {
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection());
     }
+
 }

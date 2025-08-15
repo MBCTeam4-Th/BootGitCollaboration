@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>강의 수정</title>
+</head>
+<body>
+<h1>강의 수정</h1>
+
+<form th:action="@{/admin/course/{id}/modify(id=${response.courseDetail.courseId})}"
+      method="post" enctype="multipart/form-data">
+
+    <!-- dev에서 CSRF off 상태이므로 hidden 제거 -->
+
+    <input type="hidden" name="courseId" th:value="${response.courseDetail.courseId}"/>
+
+    <div>
+        <label>강의명</label>
+        <input type="text" name="courseName" th:value="${response.courseDetail.courseName}"/>
+    </div>
+
+    <div>
+        <label>강의설명</label>
+        <textarea name="courseDescription"
+                  th:text="${response.courseDetail.courseDescription}"></textarea>
+    </div>
+
+    <div>
+        <label>수강료</label>
+        <input type="number" name="courseFee" th:value="${response.courseDetail.courseFee}"/>
+    </div>
+
+    <div>
+        <label>모집상태</label>
+        <select name="intemSellStatus">
+            <option value="order"
+                    th:selected="${response.courseDetail.intemSellStatus} == 'order'">order</option>
+            <option value="cancel"
+                    th:selected="${response.courseDetail.intemSellStatus} == 'cancel'">cancel</option>
+        </select>
+    </div>
+
+    <div>
+        <label>최대 수강인원</label>
+        <input type="number" name="maxEnrollment" th:value="${response.courseDetail.maxEnrollment}"/>
+    </div>
+
+    <div>
+        <label>대표 이미지</label>
+        <img th:if="${response.courseDetail.mainImageUrl != null}"
+             th:src="${response.courseDetail.mainImageUrl}"
+             alt="대표 이미지" style="max-width:160px"/>
+    </div>
+
+    <div th:if="${response.courseImgs != null}">
+        <div th:each="img : ${response.courseImgs}" style="display:inline-block;margin:6px">
+            <img th:src="${img.imgUrl}" alt="" style="max-width:120px; max-height:120px"/>
+        </div>
+    </div>
+
+    <div>
+        <label>새 이미지 추가</label>
+        <input type="file" name="courseImgFile" multiple/>
+    </div>
+
+    <button type="submit">저장</button>
+</form>
+
+<!-- 삭제 버튼 (원하면 표시) -->
+<form th:action="@{/admin/course/{id}/delete(id=${response.courseDetail.courseId})}"
+      method="post" style="margin-top:12px;">
+    <button type="submit" onclick="return confirm('삭제할까요?')">삭제</button>
+</form>
+
+<p><a th:href="@{/admin/course/list}">목록</a></p>
+</body>
+</html>

@@ -1,36 +1,34 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${course.courseName} + ' | 온라인 강의실'">강의 상세 | 온라인 강의실</title>
-    <link rel="stylesheet" th:href="@{/css/main.css}" />
-</head>
+<head><meta charset="UTF-8"><title>강의 상세</title></head>
 <body>
-<div class="navbar">
-    <a href="/">온라인 강의실</a>
-    <a href="/courses">강의목록</a>
-    <a href="/student/signup">회원가입</a>
+<h1>강의 상세</h1>
+
+<div>
+    <p><b>ID:</b> <span th:text="${course.courseId}">1</span></p>
+    <p><b>이름:</b> <span th:text="${course.courseName}">이름</span></p>
+    <p><b>설명:</b> <span th:text="${course.courseDescription}">설명</span></p>
+    <p><b>수강료:</b> <span th:text="${course.courseFee}">0</span></p>
+    <p><b>상태:</b> <span th:text="${course.intemSellStatus}">order</span></p>
+    <p><b>정원:</b> <span th:text="${course.maxEnrollment}">0</span></p>
 </div>
-<div class="detail-container">
-    <img class="course-image"
-         th:src="${#lists.isEmpty(images) ? '/images/default-course.jpg' : images[0].imgUrl}"
-         th:alt="${course.courseName}"/>
-    <div class="course-main">
-        <div class="course-title" th:text="${course.courseName}"></div>
-        <div class="course-meta">
-            <span>가격: <b th:text="${course.courseFee}"></b>원</span>
-            <span>정원: <b th:text="${course.maxEnrollment}"></b>명</span>
-            <span th:if="${course.intemSellStatus == 'sold_out'}" style="color:#d32f2f;font-weight:bold;">마감</span>
-            <span th:if="${course.intemSellStatus == 'sell'}" style="color:#39b54a;font-weight:bold;">신청가능</span>
-        </div>
-        <div class="course-desc" th:text="${course.courseDescription}"></div>
-        <div class="enroll-box">
-            <form th:action="@{/enrollment/enroll/{id}(id=${course.courseId})}" method="post">
-                <button type="submit" class="enroll-btn"
-                        th:disabled="${course.intemSellStatus == 'sold_out'}">수강신청</button>
-            </form>
-        </div>
+
+<div th:if="${images != null}">
+    <h3>이미지</h3>
+    <div th:each="img : ${images}">
+        <img th:src="${img.imgUrl}" alt="course image" style="max-width:180px;">
+        <span th:text="${img.mainImgYn} ? '대표' : ''"></span>
     </div>
 </div>
+
+<p><a th:href="@{/admin/course/list}">← 목록</a></p>
+
+<!-- 삭제 버튼 (관리자일 때만 노출한다면 시큐리티 태그 쓰거나, 우선은 항상 노출) -->
+<form th:action="@{'/admin/course/' + ${course.courseId} + '/delete'}" method="post"
+      onsubmit="return confirm('정말 삭제할까요?');">
+    <input type="hidden" name="_csrf" th:if="${_csrf != null}" th:value="${_csrf.token}">
+    <button type="submit">삭제</button>
+</form>
 </body>
 </html>

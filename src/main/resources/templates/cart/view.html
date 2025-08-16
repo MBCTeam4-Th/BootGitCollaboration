@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8"/>
+    <title>장바구니</title>
+    <style>
+        body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+        .wrap { max-width: 900px; margin: 32px auto; }
+        h2 { margin: 0 0 16px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #e5e7eb; padding: 10px; }
+        th { background: #f9fafb; text-align: left; }
+        .right { text-align: right; }
+        .actions form { display: inline-block; margin-right: 6px; }
+        .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .empty { padding: 24px; text-align: center; color: #6b7280; }
+        .msg { color: #1a73e8; margin-bottom: 12px; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <div class="topbar">
+        <h2>장바구니</h2>
+        <div>
+            <!-- 필요하면 학생 식별자를 여기 노출 -->
+            <small th:text="'학생 ID: ' + ${studentId}"></small>
+        </div>
+    </div>
+
+    <!-- 플래시/안내 메시지 (선택) -->
+    <p class="msg" th:if="${msg}" th:text="${msg}"></p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>과목명</th>
+            <th class="right">단가</th>
+            <th class="right">수량</th>
+            <th class="right">금액</th>
+            <th>작업</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!-- 비어있는 경우 -->
+        <tr th:if="${#lists.isEmpty(res.lines)}">
+            <td class="empty" colspan="5">장바구니가 비었습니다.</td>
+        </tr>
+
+        <!-- 라인 렌더 -->
+        <tr th:each="line : ${res.lines}">
+            <!-- CartLineRes 필드 사용: title / price / quantity / lineTotal / cartItemId -->
+            <td th:text="${line.title}">과목명</td>
+
+            <!-- 숫자 포맷: 천단위 콤마 -->
+            <td class="right" th:text="${#numbers.formatInteger(line.price, 3, 'COMMA')}">0</td>
+
+            <td class="right">
+                <form th:action="@{/cart/update}" method="post">
+                    <input type="hidden" name="studentId" th:value="${studentId}"/>
+                    <input type="hidden" name="cartItemId" th:value="${line.cartItemId}"/>
+                    <input type="number" name="quantity" th:value="${line.quantity}" min="1" style="width:70px"/>
+                    <button type="submit">수정</button>
+                    <!-- Spring Security 사용 시 CSRF 토큰 -->
+                    <input type="hidden" th:if="${_csrf != null}"
+                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+            </td>
+
+            <td class="right" th:text="${#numbers.formatInteger(line.lineTotal, 3, 'COMMA')}">0</td>
+
+            <td class="actions">
+                <form th:action="@{/cart/remove}" method="post">
+                    <input type="hidden" name="studentId" th:value="${studentId}"/>
+                    <input type="hidden" name="cartItemId" th:value="${line.cartItemId}"/>
+                    <button type="submit">삭제</button>
+                    <input type="hidden" th:if="${_csrf != null}"
+                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+
+        <!-- 합계 -->
+        <tfoot th:if="${!#lists.isEmpty(res.lines)}">
+        <tr>
+            <th colspan="3" class="right">총합</th>
+            <th class="right" th:text="${#numbers.formatInteger(res.total, 3, 'COMMA')}">0</th>
+            <th>
+                <form th:action="@{/cart/clear}" method="post">
+                    <input type="hidden" name="studentId" th:value="${studentId}"/>
+                    <button type="submit">전체 비우기</button>
+                    <input type="hidden" th:if="${_csrf != null}"
+                           th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                </form>
+            </th>
+        </tr>
+        </tfoot>
+    </table>
+
+    <!-- (테스트용) 과목ID로 바로 담기 폼 - 필요 없으면 삭제해도 됨 -->
+    <div style="margin-top:16px">
+        <form th:action="@{/cart/add}" method="post" style="display:flex; gap:8px; align-items:center;">
+            <input type="hidden" name="studentId" th:value="${studentId}"/>
+            <label>코스ID: <input type="number" name="courseId" min="1" required style="width:100px"></label>
+            <label>수량: <input type="number" name="quantity" min="1" value="1" style="width:70px"></label>
+            <button type="submit">장바구니 담기</button>
+            <input type="hidden" th:if="${_csrf != null}"
+                   th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+        </form>
+    </div>
+
+</div>
+</body>
+</html>

@@ -1,25 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><meta charset="UTF-8"/><title>강의 목록</title></head>
+<head>
+    <meta charset="UTF-8"/>
+    <title>강좌 목록</title>
+</head>
 <body>
-<h1>강의 목록</h1>
+<h1>강좌 목록</h1>
 
-<table border="1" cellspacing="0" cellpadding="6">
+<table border="1" cellpadding="6">
     <thead>
     <tr>
-        <th>ID</th><th>이름</th><th>수강료</th><th>상태</th><th>상세</th>
+        <th>ID</th>
+        <th>강의명</th>
+        <th>수강료</th>
+        <th>상태</th>
+        <th>대표이미지</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="c : ${courses}">
-        <td th:text="${c.courseId}">1</td>
-        <td th:text="${c.courseName}">이름</td>
-        <td th:text="${c.courseFee}">10000</td>
-        <td th:text="${c.intemSellStatus}">order</td>
-        <td><a th:href="@{'/courses/' + ${c.courseId}}">보기</a></td>
+    <tr th:each="item : ${response.coursePage.content}">
+        <td th:text="${item.courseId}">1</td>
+
+        <!-- 강의명 클릭 → 상세 페이지 이동 -->
+        <td>
+            <a th:href="@{/admin/course/{id}(id=${item.courseId})}"
+               th:text="${item.courseName}">제목</a>
+        </td>
+
+        <td th:text="${item.courseFee}">10000</td>
+        <td th:text="${item.intemSellStatus}">order</td>
+        <td>
+            <img th:if="${item.mainImageUrl != null}"
+                 th:src="${item.mainImageUrl}"
+                 alt="대표이미지" style="height:60px"/>
+            <span th:if="${item.mainImageUrl == null}">-</span>
+        </td>
     </tr>
     </tbody>
 </table>
+
+<div style="margin-top:12px;">
+    <span th:text="'현재 페이지: ' + ${response.currentPage}"></span>
+    <span th:text="' / 페이지 크기: ' + ${response.pageSize}"></span>
+</div>
+
+<div style="margin-top:8px;">
+    <a th:if="${response.coursePage.hasPrevious()}"
+       th:href="@{/admin/course/list(page=${response.currentPage - 1}, size=${response.pageSize})}">이전</a>
+
+    <a th:if="${response.coursePage.hasNext()}"
+       th:href="@{/admin/course/list(page=${response.currentPage + 1}, size=${response.pageSize})}">다음</a>
+</div>
 
 </body>
 </html>

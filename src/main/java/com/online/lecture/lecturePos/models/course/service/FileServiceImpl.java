@@ -45,10 +45,15 @@ public class FileServiceImpl implements FileService {
         }*/
 
         try {
+            //폴더 없으면 생성
+            File dir = new File(uploadPath);
+            if(!dir.exists()) dir.mkdirs();
+
+
             //2. 랜덤 UUID + 원본명 전처리
-        UUID uuid = UUID.randomUUID(); //랜덤 파일명 생성
-        String extension = oriImgName.substring(oriImgName.lastIndexOf(".")); // 확장자
-            String safeOriName = oriImgName.replaceAll("[^a-zA-Z0-9._-]", "_");
+             UUID uuid = UUID.randomUUID(); //랜덤 파일명 생성
+             String extension = oriImgName.substring(oriImgName.lastIndexOf(".")); // 확장자
+             String safeOriName = oriImgName.replaceAll("[^a-zA-Z0-9._-]", "_");
             // 특수문자 제거 특수문자, 공백 제거 → OS 환경에서 깨지는 문제 방지
 
             String saveFileName = uuid + "_" + safeOriName;
@@ -59,18 +64,23 @@ public class FileServiceImpl implements FileService {
             String filePath = uploadPath + File.separator + saveFileName;
 
             //4.실제파일저장
-            FileOutputStream fos = new FileOutputStream(filePath); // FileOutputStream : 바이트 배열
-            fos.write(fileData); // fos.close() 리소스해제
-            fos.close();
-
-            log.info("파일 저장 완료: {}", filePath); // {} 치환문법(SLF4J 스타일) 저장 완료 로그, DB에는 이 반환된 저장 파일명을 저장
+            try( FileOutputStream fos = new FileOutputStream(filePath)) {
+                // FileOutputStream : 바이트 배열
+            fos.write(fileData);
+            }
+            log.info("파일저장완료 : {}", filePath); // {} 치환문법(SLF4J 스타일) 저장 완료 로그, DB에는 이 반환된 저장 파일명을 저장
             return saveFileName;
-
 
         }catch (Exception e) {
             throw new RuntimeException("파일 업로드 실패", e);
         }
 
-       // return "";
+       // URL(images/courses/)
+    }
+
+    @Override
+    public String deleteFile(String uploadPath, String originalFileName) throws IllegalAccessException {
+        //  수정 완료 후 해보기
+        return "";
     }
 }

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title>강좌 상세(학생)</title></head>
+<body>
+<h1 th:text="${response.courseDetail.courseName}">강좌명</h1>
+
+<div>
+    <strong>수강료:</strong>
+    <span th:text="${response.courseDetail.courseFee}">0</span>
+</div>
+<div>
+    <strong>상태:</strong>
+    <span th:text="${response.courseDetail.intemSellStatus}">order</span>
+</div>
+<div>
+    <strong>설명:</strong>
+    <p th:text="${response.courseDetail.courseDescription}">desc</p>
+</div>
+
+<!-- 대표 이미지 -->
+<div th:if="${response.courseDetail.mainImageUrl != null}">
+    <img th:src="${response.courseDetail.mainImageUrl}" alt="대표" style="max-width:300px"/>
+</div>
+
+<!-- 썸네일(여러 장) -->
+<div th:if="${response.courseImgs != null}">
+    <div th:each="img : ${response.courseImgs}" style="display:inline-block;margin:6px">
+        <img th:src="${img.imgUrl}" alt="" style="max-width:120px; max-height:120px"/>
+    </div>
+</div>
+
+<!-- 뒤로가기(학생용 목록) -->
+<p><a th:href="@{/student/courses/list}">목록</a></p>
+</body>
+</html>

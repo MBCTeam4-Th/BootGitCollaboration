@@ -42,7 +42,7 @@ public class EnrollmentPageController {
 
         String email = (String) session.getAttribute("userEmail");
 
-        Student student = studentService.findByEmail(email);
+       Student student = studentService.findByEmail(email);
 
         model.addAttribute("enrollments", enrollmentService.getMyEnrollments(student));
 

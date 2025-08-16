@@ -165,19 +165,25 @@ public class CourseServiceImpl implements CourseService {
         if(request.getMaxEnrollment() !=null) course.setMaxEnrollment(request.getMaxEnrollment());
         //if (request.getMainImgUrl() != null) course.
 
+        //현재대표유무확인 추가
+        var existImgs =courseImgRepository.findByCourse(course);
+        boolean hasMain = existImgs.stream().anyMatch(img -> Boolean.TRUE.equals(img.getMainImgYn()));
+
         //새 이미지가 있으면 추가 저장 (대표이미지 교체는 정책 정해지면 별도 처리)
         if(newimgFiles !=null) {
+            boolean mainAssigned = hasMain; // 대표있으면 true로 시작
             for(MultipartFile file : newimgFiles) {
                 if(file !=null && !file.isEmpty()) {
-                    courseImgService.saveCourseImg(course, file, false); //지금은 추가만
+                    boolean makeMain = !mainAssigned; // 대표이미지가 없으면 첫 유효파일을 대표이미지로
+                    courseImgService.saveCourseImg(course, file, makeMain);
+                    if(makeMain) mainAssigned = true;
                 }
             }
         }
 
-        // 대표이미지 재지정 (request.getMainImgUrl()에 담겨옴)
+        // 대표이미지 재지정 (request.getMainImgUrl()에 담겨옴) 요청으로 넘어오는 경우는 우선
         if (request.getMainImgUrl() !=null && !request.getMainImgUrl().isBlank()) {
             var imgs = courseImgRepository.findByCourse(course);
-
             //false 모두
             imgs.forEach( i -> i.setMainImgYn(false));
 
@@ -228,5 +234,7 @@ public class CourseServiceImpl implements CourseService {
         //2 강좌삭제
         courseRepository.delete(course);
     }
+
+
 
 } // course imgService 종료

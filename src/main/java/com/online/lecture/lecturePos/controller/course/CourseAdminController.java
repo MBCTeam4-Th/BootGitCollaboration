@@ -6,6 +6,7 @@ import com.online.lecture.lecturePos.models.course.dto.getCourse.GetCourseListRe
 import com.online.lecture.lecturePos.models.course.dto.modifyCourse.ModifyCourseReq;
 import com.online.lecture.lecturePos.models.course.dto.modifyCourse.ModifyCourseRes;
 import com.online.lecture.lecturePos.models.course.dto.postCourse.PostCourseReq;
+import com.online.lecture.lecturePos.models.course.service.CourseImgService;
 import com.online.lecture.lecturePos.models.course.service.CourseService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,7 @@ public class CourseAdminController {
 
 
     private final CourseService courseService;
+    private final CourseImgService courseImgService;
 
     //1-1. Course 등록 폼 진입
      @GetMapping("/new")
@@ -135,13 +137,20 @@ public class CourseAdminController {
         return "redirect:/admin/course/"+courseId;
     }
 
-//4 Course 삭제
+//4-1 Course 삭제
     @PostMapping("/{courseId}/delete")
     public String deleteCourse(@PathVariable Long courseId, Model model){
          courseService.deleteCourse(courseId);
          return "redirect:/admin/course/list";
     }
 
+    // 4-2이미지삭제
+    @PostMapping("/{courseId}/img/delete")
+    public String deleteCourseImg(@PathVariable Long courseId,
+                                  @RequestParam("imgUrl") String imgUrl){
+         courseImgService.deleteCourseImg(courseId, imgUrl);
+         return "redirect:/admin/course/"+courseId+"/modify";
+    }
 
 
 

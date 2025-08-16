@@ -13,5 +13,8 @@ public interface CourseImgService {
     //1.파일업로드
     PostCourseImgRes saveCourseImg(Course course, MultipartFile file, boolean isRepresentative);
 
+    // 2. 이미지삭제
+    void deleteCourseImg(Long courseId, String imgUrl);
+
 
 }

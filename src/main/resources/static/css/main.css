@@ -52,3 +52,99 @@ input[type=text], input[type=password] { width:100%; box-sizing:border-box; padd
 .status.order { color:#39b54a;}
 .status.cancel { color:#d32f2f; }
 .clear { clear:both;}
+
+
+
+/* index cards */
+.quick-actions {
+    display: flex;          /* 가로로 배치 */
+    flex-wrap: wrap;        /* 공간 부족 시 줄바꿈 */
+    gap: 10px;              /* 버튼 사이 간격 */
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: center;
+}
+.card-grid {
+    margin: 36px auto 80px auto;
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+}
+.card {
+    display:block;
+    background:#fff;
+    border-radius:12px;
+    padding:20px 22px;
+    box-shadow:0 4px 18px #0002;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow:0 10px 28px #0003;
+}
+.card-title {
+    font-size:1.08rem;
+    font-weight:700;
+    color:#232323;
+    margin-bottom:8px;
+}
+.card-desc {
+    font-size:.95rem;
+    color:#666;
+    line-height:1.4;
+}
+
+/* 반응형 */
+@media (max-width: 1024px) {
+    .card-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 560px) {
+    .card-grid { grid-template-columns: 1fr; }
+}
+
+/* --- navbar overlap fix --- */
+.navbar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;          /* 폭이 좁아지면 줄바꿈 허용 */
+    gap: 12px 16px;           /* 요소 간격 */
+}
+
+/* 첫 번째 링크(브랜드)를 왼쪽에 고정, 나머지는 오른쪽으로 밀기 */
+.navbar a:first-child {
+    margin-right: auto;
+}
+
+/* 링크들을 버튼처럼 보이게 여백 확보 */
+.navbar a {
+    display: inline-block;
+    padding: 6px 10px;
+    line-height: 1.2;
+    border-radius: 6px;
+}
+
+/* 데스크톱 이상: 한 줄 유지 */
+@media (min-width: 768px) {
+    .navbar { flex-wrap: nowrap; }
+    .navbar a { margin-top: 0; }
+}
+
+/* 모바일: 세로로 정렬 (겹침 방지) */
+@media (max-width: 560px) {
+    .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    .navbar a:first-child {
+        margin-right: 0;      /* 세로 정렬 시 자동 밀기 해제 */
+    }
+}

@@ -4,6 +4,7 @@ import com.online.lecture.lecturePos.models.course.domain.Course;
 import com.online.lecture.lecturePos.models.course.domain.CourseImg;
 import com.online.lecture.lecturePos.models.course.dto.postCourseImg.PostCourseImgRes;
 import com.online.lecture.lecturePos.models.course.repository.CourseImgRepository;
+import com.online.lecture.lecturePos.models.course.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,7 @@ public class CourseImgServiceImpl implements CourseImgService {
 
     private final CourseImgRepository courseImgRepository;
     private final FileService fileService;
+    private final CourseRepository courseRepository;
 
     @Value("${file.upload-dir}") // @Value("${courseImgLocation}") // application.properties에서 설정 courseImgLocation=C:/lecture/class/courses
     private String uploadPath;
@@ -69,4 +71,34 @@ public class CourseImgServiceImpl implements CourseImgService {
             throw new RuntimeException("이미지 저장 실패", e);
         }
     }
+
+    @Override
+    @Transactional
+    public void deleteCourseImg(Long courseId, String imgUrl) {
+        // 이미지삭제메서드
+        var course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지않는 강좌 입니다 ID : " + courseId));
+        // Course의 이미지들 가져와서 해당 URL 찾기
+        var imgs = courseImgRepository.findByCourse(course);
+        var targetOption = imgs.stream()
+                .filter(img -> imgUrl.equals(img.getImgUrl()))
+                .findFirst();
+
+        if(targetOption.isEmpty()) return; // 없으면 그냥 무시
+
+        var target = targetOption.get();
+        boolean wasMain = Boolean.TRUE.equals(target.getMainImgYn());
+
+        // 물리파일삭제 추가예정
+        // try{ fileService.deleteFile(uploadRoot + target.getImgName());}
+
+        courseImgRepository.delete(target);
+
+        //삭제 이미지가 대표이미지였으면 다른 이미지를 대표로 등록
+        if(wasMain){
+            var remain = courseImgRepository.findByCourse(course);
+            remain.stream().findFirst().ifPresent(img -> img.setMainImgYn(true));
+        }
+    }
+
 }

@@ -12,7 +12,8 @@
 
     <!-- dev에서 CSRF off 상태이므로 hidden 제거 -->
 
-    <input type="hidden" name="courseId" th:value="${response.courseDetail.courseId}"/>
+    <input type="hidden" name="cour
+    seId" th:value="${response.courseDetail.courseId}"/>
 
     <div>
         <label>강의명</label>
@@ -52,11 +53,28 @@
              alt="대표 이미지" style="max-width:160px"/>
     </div>
 
+    <!-- 썸네일 목록  -->
     <div th:if="${response.courseImgs != null}">
-        <div th:each="img : ${response.courseImgs}" style="display:inline-block;margin:6px">
-            <img th:src="${img.imgUrl}" alt="" style="max-width:120px; max-height:120px"/>
+        <div th:each="img : ${response.courseImgs}" style="display:inline-block;margin:6px;text-align:center;">
+            <img th:src="${img.imgUrl}" alt="" style="max-width:120px; max-height:120px; display:block; margin-bottom:6px;"/>
+
+            <div th:if="${img.mainImgYn}">[대표]</div>
+
+            <!-- 대표로 지정 -->
+            <form th:action="@{'/admin/course/' + ${response.courseDetail.courseId} + '/modify'}" method="post" style="margin-top:6px;">
+                <input type="hidden" name="courseId" th:value="${response.courseDetail.courseId}"/>
+                <input type="hidden" name="mainImgUrl" th:value="${img.imgUrl}"/>
+                <button type="submit">대표로 지정</button>
+            </form>
+
+            <!-- 삭제 -->
+            <form th:action="@{'/admin/course/' + ${response.courseDetail.courseId} + '/img/delete'}" method="post" style="margin-top:6px;">
+                <input type="hidden" name="imgUrl" th:value="${img.imgUrl}"/>
+                <button type="submit" onclick="return confirm('이 이미지를 삭제할까요?')">삭제</button>
+            </form>
         </div>
     </div>
+
 
     <div>
         <label>새 이미지 추가</label>

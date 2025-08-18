@@ -4,7 +4,6 @@ import com.online.lecture.lecturePos.models.student.dto.StudentDTO;
 import com.online.lecture.lecturePos.models.student.domain.Student;
 import com.online.lecture.lecturePos.models.student.repository.StudentRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class StudentService {
 
-    @Autowired
-    private StudentRepository studentRepository;
-    private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final StudentRepository studentRepository;
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // 회원가입
     public StudentDTO signUp(StudentDTO dto) {
-        dto.setPassword(passwordEncoder.encode(dto.getPassword())); // 비밀번호 암호화
+        dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         Student saved = studentRepository.save(dto.toEntity());
         return StudentDTO.fromEntity(saved);
     }
@@ -50,9 +49,8 @@ public class StudentService {
     // 수정
     public StudentDTO update(StudentDTO dto) {
         if (dto.getPassword() != null && !dto.getPassword().isEmpty()) {
-            dto.setPassword(passwordEncoder.encode(dto.getPassword())); // 새 비밀번호 암호화
+            dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         } else {
-            // 기존 비밀번호 유지
             dto.setPassword(studentRepository.findById(dto.getStudentId())
                     .map(Student::getPassword)
                     .orElse(null));
@@ -65,4 +63,6 @@ public class StudentService {
     public void delete(Long id) {
         studentRepository.deleteById(id);
     }
+
+
 }

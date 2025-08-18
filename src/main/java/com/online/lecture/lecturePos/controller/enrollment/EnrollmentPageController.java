@@ -1,8 +1,8 @@
 package com.online.lecture.lecturePos.controller.enrollment;
 
 
-import com.online.lecture.lecturePos.models.student.domain.Student;
 import com.online.lecture.lecturePos.models.enrollment.service.EnrollmentService;
+import com.online.lecture.lecturePos.models.student.dto.StudentDTO;
 import com.online.lecture.lecturePos.models.student.service.StudentService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class EnrollmentPageController {
 
         String email = (String) session.getAttribute("userEmail");
 
-        Student student = studentService.findByEmail(email);
+        StudentDTO studentDTO = studentService.findByEmail(email);
 
-        enrollmentService.enroll(student, courseId);
+        enrollmentService.enroll(studentDTO.toEntity(), courseId);
 
         return "redirect:/enrollment/my";
     }
@@ -42,9 +42,9 @@ public class EnrollmentPageController {
 
         String email = (String) session.getAttribute("userEmail");
 
-        Student student = studentService.findByEmail(email);
+        StudentDTO studentDTO = studentService.findByEmail(email);
 
-        model.addAttribute("enrollments", enrollmentService.getMyEnrollments(student));
+        model.addAttribute("enrollments", enrollmentService.getMyEnrollments(studentDTO.toEntity()));
 
         return "enrollment/myEnrollments";
     }

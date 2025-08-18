@@ -1,12 +1,9 @@
 package com.online.lecture.lecturePos.models.cart.domain;
 
-
 import com.online.lecture.lecturePos.models.student.domain.Student;
+import com.online.lecture.lecturePos.models.course.domain.Course;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -14,6 +11,8 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "cart")
+@ToString
 public class Cart {
 
     @Id
@@ -21,13 +20,11 @@ public class Cart {
     @Column(name = "cart_id")
     private Long cartId;
 
-    // 장바구니 주인
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "student_id")
     private Student student;
 
-    // 장바구니에 담긴 아이템들
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items = new ArrayList<>();
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    private Course course;
 }

@@ -18,7 +18,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class CourseServiceImpl implements CourseService {
+public class CourseServiceImpl extends CourseService {
     
         @Autowired
         private CourseRepository courseRepository;

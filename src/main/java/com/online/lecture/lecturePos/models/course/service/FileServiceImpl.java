@@ -16,7 +16,7 @@ public class FileServiceImpl implements FileService {
         UUID uuid = UUID.randomUUID(); //랜덤 파일명 생성
         String extension = originalFileName.substring(originalFileName.lastIndexOf(".")); // 확장자
             String saveFileName = uuid.toString() + extension; //uuid+원래파일명 결합
-            String fileUp
+
 
 
         }catch (Exception e) {}

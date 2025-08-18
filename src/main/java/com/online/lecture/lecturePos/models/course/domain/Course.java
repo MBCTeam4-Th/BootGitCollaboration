@@ -1,6 +1,5 @@
 package com.online.lecture.lecturePos.models.course.domain;
 
-import com.online.lecture.lecturePos.core.SellStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,29 +9,18 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "course")
+@ToString
 public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name ="course_id")
+    @Column(name = "course_id")
     private Long courseId;
 
-    @Column(name ="course_name")
+    @Column(name = "course_name", nullable = false)
     private String courseName;
 
-    @Column(name="course_description")
-    private String courseDescription;
-
-    @Column(name = "course_fee")
-    private Integer courseFee;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "item_sell_status")
-    private SellStatus intemSellStatus;
-
-    @Column(name = "max_enrollment")
-    private Integer maxEnrollment;
-
-//    @OneToMany(mappedBy = "course")
-//    private List<CourseImg> images = new ArrayList<>();
+    @Column(name = "description")
+    private String description;
 }

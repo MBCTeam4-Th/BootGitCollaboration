@@ -25,30 +25,30 @@ public class EnrollmentService {
     private CourseRepository courseRepository;
 
 
-    public Enrollment enroll(Student student, Long courseId) {
+//    public Enrollment enroll(Student student, Long courseId) {
 
-        Course course = courseRepository.findById(courseId).orElseThrow();
-
-        Enrollment enrollment = new Enrollment();
-
-        enrollment.setStudent(student);
-        enrollment.setEnrollmentStatus(Enrollment.OrderStatus.order);
-
-        enrollment = enrollmentRepository.save(enrollment);
-
-        EnrollmentDetail detail = new EnrollmentDetail();
-
-        detail.setEnrollment(enrollment);
-        detail.setCourse(course);
-        detail.setCourseFee(course.getCourseFee());
-
-        enrollmentDetailRepository.save(detail);
-
-        return enrollment;
-    }
-
-    public List<Enrollment> getMyEnrollments(Student student) {
-        return enrollmentRepository.findByStudent(student);
-    }
+//        Course course = courseRepository.findById(courseId).orElseThrow();
+//
+//        Enrollment enrollment = new Enrollment();
+//
+//        enrollment.setStudent(student);
+//        enrollment.setEnrollmentStatus(Enrollment.OrderStatus.order);
+//
+//        enrollment = enrollmentRepository.save(enrollment);
+//
+//        EnrollmentDetail detail = new EnrollmentDetail();
+//
+//        detail.setEnrollment(enrollment);
+//        detail.setCourse(course);
+//        detail.setCourseFee(course.getCourseFee());
+//
+//        enrollmentDetailRepository.save(detail);
+//
+//        return enrollment;
+//    }
+//
+//    public List<Enrollment> getMyEnrollments(Student student) {
+//        return enrollmentRepository.findByStudent(student);
+//    }
 
 }

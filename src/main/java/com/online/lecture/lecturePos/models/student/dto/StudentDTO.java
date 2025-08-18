@@ -5,9 +5,9 @@ import lombok.*;
 
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class StudentDTO {
 
     private Long studentId;
@@ -19,11 +19,11 @@ public class StudentDTO {
     // DTO → Entity 변환
     public Student toEntity() {
         return Student.builder()
-                .studentId(studentId)
-                .email(email)
-                .password(password)
-                .studentName(studentName)
-                .role(role)
+                .studentId(this.studentId)
+                .email(this.email)
+                .password(this.password)
+                .studentName(this.studentName)
+                .role(this.role)
                 .build();
     }
 
@@ -32,6 +32,7 @@ public class StudentDTO {
         return StudentDTO.builder()
                 .studentId(student.getStudentId())
                 .email(student.getEmail())
+                .password(student.getPassword())
                 .studentName(student.getStudentName())
                 .role(student.getRole())
                 .build();

@@ -1,21 +1,19 @@
 package com.online.lecture.lecturePos.models.enrollment.domain;
 
-
 import com.online.lecture.lecturePos.models.student.domain.Student;
+import com.online.lecture.lecturePos.models.course.domain.Course;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDateTime;
-
 
 @Entity
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "enrollment")
+@ToString
 public class Enrollment {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,14 +24,7 @@ public class Enrollment {
     @JoinColumn(name = "student_id")
     private Student student;
 
-    @Column(name = "enrollment_date")
-    private LocalDateTime enrollmentDate;
-
-    @Enumerated(EnumType.STRING)
-    private OrderStatus enrollmentStatus;
-
-    public enum OrderStatus {
-       order , cancel
-    }
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_id")
+    private Course course;
 }
